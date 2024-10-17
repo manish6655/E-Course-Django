@@ -1,0 +1,84 @@
+{% extends './base.html' %}
+{% load course_custom_tags %}
+{% load static %}
+
+{% block body %}
+
+<style>
+  #video_list{
+    overflow-y: scroll;
+    max-height: 400px; /* Adjust the max-height as needed */
+  }
+  .active-video{
+    background-color: rgb(95, 99, 103);
+    color: antiquewhite;
+  }
+  a:hover{
+    text-decoration: none;
+  }
+  a{
+    color: rgb(59, 49, 49);
+  }
+  span{
+    font-weight: 500%;
+  }
+
+  .no_preview{
+    cursor: not-allowed;
+  }
+</style>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{video.video_id}}"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+            </div>
+        </div>
+        <div class="col-lg-4">
+          <ul class="list-group" id="video_list">
+              {% for v in videos %}
+                  <li class="list-group-item 
+                  {% if v == video %} active-video {% endif%}">
+                      <a href="?lecture={{v.serial_number}}" class="d-flex justify-content-between align-items-center">
+                          <span>{{v}}</span>
+                      </a>
+                  </li>
+              {% endfor %}
+          </ul>
+      </div>
+      
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">{{ course.name }}</h5>
+            <p class="card-text">{{ course.description }}</p>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Prerequisite</h5>
+            <ul class="list-unstyled">
+                {% for prerequisite in course.prerequisite_set.all %}
+                    <li>{{ prerequisite.description }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Learning</h5>
+            <ul class="list-unstyled">
+                {% for learning in course.learning_set.all %}
+                    <li>{{ learning.description }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock body %}

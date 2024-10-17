@@ -1,0 +1,40 @@
+{% extends './base.html' %}
+{% block body %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CodeMaP-Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .create-account {
+            text-align: center;
+        }
+    </style>
+  </head>
+    <body class="bg-nav">
+      <nav class="navbar">
+      </nav>
+      <div class="create-account">
+          <div class="form-container">
+            <h2 class="text-center mb-4">Login</h2>
+              <form class='form'  method="post" action=''>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_username">Email</label>
+                    {{form.username}}
+                </div>
+                <div class="form-group">
+                    <label for="id_password">Password</label>
+                    {{form.password}}
+                </div>
+                <button type="submit" class="btn btn-outline-dark btn-login btn-block">Login</button>
+              </form>
+              <p class="mt-2 text-center">Not a member? <a href="/signup" style="text-decoration: none;">Create Account</a></p><br>
+            </div>
+          </div>
+      </div>
+    </body>
+</html>
+{% endblock body %}

@@ -1,0 +1,42 @@
+{% extends './base.html' %}
+{% load course_custom_tags %}
+{% block body %}
+<div class="container mt-5">
+  <div class="row">
+    {% for course in courses %}
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <img class="card-img-top" src="{{course.thumbnail.url}}" alt="image is not available">
+        <div class="card-body">
+          <h5 class="card-title">{{course.name}}</h5>
+          <p class="card-text">
+            Save {{course.discount}}%
+            <br>
+            <del>{{course.price|currency}}</del>
+            &nbsp;
+            <span>{% cal_price course.price course.discount as value %} {{value|currency}}</span>
+          </p>
+        </div>
+        <div class="card-footer p-0 border-0">
+          <div class="row no-gutters">
+            {% is_enrolled request course as enrolled %}
+          {% if enrolled is True%}
+            <div class="col">
+              <a href="/coursepage/{{course.slug}}" class="btn btn-light btn-block">Start Course</a>
+            </div>
+            {% else %}
+            <div class="col border-right-1">
+              <a href="/check-out/{{course.slug}}" class="btn btn-light btn-block">Enroll</a>
+            </div>
+            <div class="col">
+              <a href="/coursepage/{{course.slug}}" class="btn btn-light btn-block">Show more</a>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock body %}

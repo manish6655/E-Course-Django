@@ -1,0 +1,67 @@
+{% extends './base.html' %}
+{% load course_custom_tags %}
+{% block body %}
+<div class="container mt-4">
+    <div class="card text-center">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="card">
+                        <img class="card-img-top" src="{{course.thumbnail.url}}" alt="image is not available">
+                        <div class="card-body">
+                            <h5 class="card-title">{{course.name}}</h5>
+                            <p class="card-text">
+                                Save {{course.discount}}%
+                                <br>
+                                <del>{{course.price|currency}}</del>
+                                &nbsp;
+                                <span>{% cal_price course.price course.discount as value %} {{value|currency}}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="text-center">
+                        <h1 class="display-5">{{course.name}}</h1>
+                        <hr>
+                        <h1 class="display-5">Payable Amount: <b>{% cal_price course.price course.discount as value %}
+                                {{value|currency}}</b></h1>
+                        <a class="btn btn-primary mt-3" href="?action=create_payment">Continue to Payment</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if order is not None %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var options = {
+        "key": "rzp_test_imMPISw5bJUeRv", // Enter the Key ID generated from the Dashboard
+        "amount": "{{amount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "CodeMaP",
+        "description": "Payment for {{course.name}}",
+        // "image": "https://avatars.githubusercontent.com/u/122358662?v=4",
+        "order_id": "{{order.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "callback_url": "http://127.0.0.1:8000/verify_payment",
+        "prefill": {
+            "name": "{{user.first_name}}",
+            "email": "{{user.email}}"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open()
+</script>
+{% endif %}
+{% if error is not None %}
+<script>
+    window.onload = ()=>{
+        alert("{{error}}")
+    }
+</script>
+{% endif %}
+{% endblock body %}
